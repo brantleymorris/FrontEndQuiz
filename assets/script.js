@@ -18,45 +18,62 @@
         },
         q2 = {
             question : "What does CSS stand for?",
-            answer1 : "Cyclical Styleing System",
+            answer1 : "Cyclical Styling System",
             answer2 : "Cicadian System Standards",
             answer3 : "Cassading Style Sheets",
             answer4 : "None of the above",
             //correct : answer3  need to make sure this will work correctly
+        },
+        q3 = {
+            question : "What is an API?",
+            answer1 : "",
+            answer2 : "",
+            answer3 : "",
+            answer4 : "",
+            //correct :   need to make sure this will work correctly
+        },
+        q4 = {
+            question : "",
+            answer1 : "",
+            answer2 : "",
+            answer3 : "",
+            answer4 : "",
+            //correct :  need to make sure this will work correctly 
+        },
+        q5 = {
+            question : "",
+            answer1 : "",
+            answer2 : "",
+            answer3 : "",
+            answer4 : "",
+            //correct :  need to make sure this will work correctly
         }
     ];
     // create array of objects for usernames and scores
 
     // create listener to activate function
-console.log(questions[0].question);
 
     // create function to select and write questions (randomly from array, and remove from array when answers/ optional)
     function writeQuesiton (i) {
-            var quesitonPrompt = document.createElement("ul");
-            console.log(questions[i].question); // logs string correctly
-            questionPrompt.textContent = questions[i].question; // need to make sure this works
+            var questionPrompt = document.createElement("ul");
+            questionPrompt.textContent = questions[i].question;
             questionEl.append(questionPrompt);
 
             var answerA = document.createElement("li");
             answerA.textContent = questions[i].answer1;
-            questiosnPrompt.append(answerA);
+            questionPrompt.append(answerA);
 
             var answerB = document.createElement("li");
             answerB.textContent = questions[i].answer2
-            questiosnPrompt.append(answerB);
+            questionPrompt.append(answerB);
 
             var answerC = document.createElement("li");
             answerC.textContent = questions[i].answer3
-            questiosnPrompt.append(answerC);
+            questionPrompt.append(answerC);
 
             var answerD = document.createElement("li");
             answerD.textContent = questions[i].answer4
-            questiosnPrompt.append(answerD);
-
-            /*document.getElementById("answer1").textContent = questions[i].answer1
-            document.getElementById("answer2").textContent = questions[i].answer2
-            document.getElementById("answer3").textContent = questions[i].answer3
-            document.getElementById("answer4").textContent = questions[i].answer4*/
+            questionPrompt.append(answerD);
     };
     // create function to store usernames and scores to local storage
 
