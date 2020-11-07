@@ -61,7 +61,7 @@
 
         var answerA = document.createElement("li");
         answerA.textContent = questions[i].answer1;
-        answerA.setAttribute("id","selectedA"); // need to figure out how to set this so that it can be called later
+        answerA.setAttribute("id","selectedA"); // need to figure out how to set this so that it can be called later, need to add css tags
         questionPrompt.append(answerA);
 
         var answerB = document.createElement("li");
@@ -80,7 +80,8 @@
         questionPrompt.append(answerD);
 
         // need to add something to remove .show, changes it to hide and will need to set display: hide; in css
-        document.querySelector(".show").setAttribute("class", "hide");
+        // document.querySelector(".show").setAttribute("class", "hide");
+        document.querySelector(".show").remove();
     };
 
     // write function for timer to be trigger by listener event when begin is pressed
@@ -102,7 +103,35 @@
         timerEl.textContent = "Time is up"
     }
 
+
+    function writeNew() { // may need to make one of these for B, C, D / or figure out how to pass in target
+        if (document.getElementById("answerA").textContent === questions[currentQuestionIndex].correct) {
+            currentQuestionIndex ++;
+            alert("Correct"); // may not need this, will just get in the way
+            secondsLeft += 10; //use secondsLeft for userscore?
+            questionPrompt.remove(); // remove old question
+            writeQuestions(currentQuestionIndex);
+        }
+        else {
+            currentQuestionIndex ++;
+            secondsLeft -= 10;
+            alert("Wrong");
+            questionPrompt.remove(); // remove old question
+            writeQuestion(currentQuestionIndex);
+        }
+    };
 // create function to prompt username and store to localStorage
+    if (currentQuestionIndex > 4) {
+        questionPrompt.remove();
+
+        var userForm = document.createElement("form");
+        userForm.textContent = "Enter name";
+        questionEl.append(userForm);
+
+        var userName = document.createElement("input");
+        userName.setAttribute("type", "input");
+        userForm.append(userName);
+    }
 
 // eventListener to setTime and writeQuetion
     begin.addEventListener("click", function() {
@@ -110,17 +139,7 @@
         writeQuestion(currentQuestionIndex);
     });
 
-    document.getElementById("answerA").addEventListener("click", function() { // not selecting properly, may need to set variable for target before adding listener?
-        if (document.getElementById("answerA").textContent === questions[currentQuestionIndex].correct) {
-            currentQuestionIndex ++;
-            alert("Correct"); // may not need this, will just get in the way
-            secondsLeft += 10; //use secondsLeft for userscore?
-            writeQuestions(currentQuestionIndex);
-        }
-        else {
-            currentQuestionIndex ++;
-            secondsLeft -= 10;
-            alert("Wrong");
-            writeQuestion(currentQuestionIndex);
-        }
-    });
+    document.getElementById("answerA").addEventListener("click", writeNew());  // keeps erroring that target is null, ask about in office hours
+    document.getElementById("answerB").addEventListener("click", writeNew()); 
+    document.getElementById("answerC").addEventListener("click", writeNew()); 
+    document.getElementById("answerD").addEventListener("click", writeNew()); 
