@@ -3,11 +3,10 @@
     var questionEl = document.getElementById("questions");
     var timerEl = document.getElementById("timer");
     var scoresEl = document.getElementById("scores");
-    var begin= document.getElementById("startQuiz")
+    var begin= document.getElementById("startQuiz");
+    var questionPrompt = document.createElement("ul");
+    var secondsLeft = 60;
     var currentQuestionIndex = 0;
-    var user;
-
-    // create array of objects for questions, probably need like 5
 
     var questions = [
         q1 = { // remove q# for all objects
@@ -55,45 +54,55 @@
 
     // create function to select and write questions (randomly from array, and remove from array when answers/ optional)
     function writeQuestion (i) {
-        var questionPrompt = document.createElement("ul");
+        //var questionPrompt = document.createElement("ul");
         questionPrompt.textContent = questions[i].question;
         questionEl.append(questionPrompt);
 
-        var answerA = document.createElement("li");
+        var answerALi = document.createElement("li");
+        var answerA = document.createElement("button")
         answerA.textContent = questions[i].answer1;
-        answerA.setAttribute("id","selectedA"); // need to figure out how to set this so that it can be called later, need to add css tags
-        questionPrompt.append(answerA);
+        answerA.setAttribute("id","selectedA");
+        answerA.onclick = answerClickedA;
+        answerALi.append(answerA);
+        questionPrompt.append(answerALi);
 
-        var answerB = document.createElement("li");
+        var answerBLi = document.createElement("li");
+        var answerB = document.createElement("button");
         answerB.textContent = questions[i].answer2
         answerB.setAttribute("id", "selectedB")
-        questionPrompt.append(answerB);
+        answerB.onclick = answerClickedB;
+        questionPrompt.append(answerBLi);
+        answerBLi.append(answerB);
 
-        var answerC = document.createElement("li");
+        var answerCLi = document.createElement("li");
+        var answerC = document.createElement("button");
         answerC.textContent = questions[i].answer3
         answerC.setAttribute("id", "selectedC")
-        questionPrompt.append(answerC);
+        answerC.onclick = answerClickedC;
+        questionPrompt.append(answerCLi);
+        answerCLi.append(answerC);
 
-        var answerD = document.createElement("li");
+        var answerDLi = document.createElement("li");
+        var answerD = document.createElement("button");
         answerD.textContent = questions[i].answer4
         answerD.setAttribute("id", "selectedD")
-        questionPrompt.append(answerD);
+        answerD.onclick = answerClickedD;
+        questionPrompt.append(answerDLi);
+        answerDLi.append(answerD);
 
-        // need to add something to remove .show, changes it to hide and will need to set display: hide; in css
-        // document.querySelector(".show").setAttribute("class", "hide");
-        document.querySelector(".show").remove();
+        if (document.querySelector(".show")) {
+            document.querySelector(".show").setAttribute("class", "hide");
+        }
     };
 
-    // write function for timer to be trigger by listener event when begin is pressed
-    var secondsLeft = 60;
-   
+// write function for timer to be trigger by listener event when begin is pressed
     function setTime() {
         var timerInterval = setInterval(function() {
             secondsLeft --;
             timerEl.textContent = secondsLeft + " seconds remaining";
 
             if (secondsLeft === 0) {
-                clearInterval(timerInterval);
+                clearInterval(timerInterval); // not sure if I need this
                 endMessage();
             }
         }, 1000);
@@ -101,27 +110,74 @@
 
     function endMessage() {
         timerEl.textContent = "Time is up"
-    }
+        document.querySelector(".hide").setAttribute("class", "show")
+    };
 
-
-    function writeNew() { // may need to make one of these for B, C, D / or figure out how to pass in target
-        if (document.getElementById("answerA").textContent === questions[currentQuestionIndex].correct) {
-            currentQuestionIndex ++;
+// in place of eventListeners
+    function answerClickedA() {
+        if (this.textContent === questions[currentQuestionIndex].correct) {
             alert("Correct"); // may not need this, will just get in the way
-            secondsLeft += 10; //use secondsLeft for userscore?
-            questionPrompt.remove(); // remove old question
-            writeQuestions(currentQuestionIndex);
+            secondsLeft += 10;
+            //questionPrompt.remove(); // remove old question
         }
         else {
-            currentQuestionIndex ++;
             secondsLeft -= 10;
             alert("Wrong");
-            questionPrompt.remove(); // remove old question
-            writeQuestion(currentQuestionIndex);
+            //questionPrompt.remove(); // remove old question
         }
+        currentQuestionIndex ++;
+        writeQuestion(currentQuestionIndex);
     };
+
+    function answerClickedB() {
+        if (this.textContent === questions[currentQuestionIndex].correct) {
+            alert("Correct"); // may not need this, will just get in the way
+            secondsLeft += 10;
+            //questionPrompt.remove(); // remove old question
+        }
+        else {
+            secondsLeft -= 10;
+            alert("Wrong");
+            //questionPrompt.remove(); // remove old question
+        }
+        currentQuestionIndex ++;
+        writeQuestion(currentQuestionIndex);
+    };
+
+    function answerClickedC() {
+        if (this.textContent === questions[currentQuestionIndex].correct) {
+            alert("Correct"); // may not need this, will just get in the way
+            secondsLeft += 10;
+            //questionPrompt.remove(); // remove old question
+        }
+        else {
+            secondsLeft -= 10;
+            alert("Wrong");
+            //questionPrompt.remove(); // remove old question
+        }
+        currentQuestionIndex ++;
+        writeQuestion(currentQuestionIndex);
+    };
+
+    function answerClickedD() {
+        if (this.textContent === questions[currentQuestionIndex].correct) {
+            alert("Correct"); // may not need this, will just get in the way
+            secondsLeft += 10; 
+            //questionPrompt.remove(); // remove old question
+        }
+        else {
+            secondsLeft -= 10;
+            alert("Wrong");
+            //questionPrompt.remove(); // remove old question
+        }
+        currentQuestionIndex ++;
+        writeQuestion(currentQuestionIndex);
+    };
+
+
+    
 // create function to prompt username and store to localStorage
-    if (currentQuestionIndex > 4) {
+   if (currentQuestionIndex > 4 || secondsLeft === 0) {
         questionPrompt.remove();
 
         var userForm = document.createElement("form");
@@ -131,15 +187,13 @@
         var userName = document.createElement("input");
         userName.setAttribute("type", "input");
         userForm.append(userName);
-    }
+    } 
 
 // eventListener to setTime and writeQuetion
     begin.addEventListener("click", function() {
+        secondsLeft = 60;
         setTime();
         writeQuestion(currentQuestionIndex);
-    });
 
-    document.getElementById("answerA").addEventListener("click", writeNew());  // keeps erroring that target is null, ask about in office hours
-    document.getElementById("answerB").addEventListener("click", writeNew()); 
-    document.getElementById("answerC").addEventListener("click", writeNew()); 
-    document.getElementById("answerD").addEventListener("click", writeNew()); 
+
+    });
