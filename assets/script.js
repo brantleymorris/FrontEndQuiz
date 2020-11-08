@@ -1,5 +1,4 @@
-// To do list
-    // be sure to set variable for writing to html at top
+// global variables
     var questionEl = document.getElementById("questions");
     var timerEl = document.getElementById("timer");
     var scoresEl = document.getElementById("scores");
@@ -7,9 +6,10 @@
     var questionPrompt = document.createElement("ul");
     var secondsLeft = 60;
     var currentQuestionIndex = 0;
+    var user = [];
 
     var questions = [
-        q1 = { // remove q# for all objects
+        q1 = {
             question : "Which of following can be used to add style to a web page?",
             answer1 : "html",
             answer2 : "css",
@@ -50,9 +50,8 @@
             correct : "javascript"
         }
     ];
-    // create array of objects for usernames and scores
 
-    // create function to select and write questions (randomly from array, and remove from array when answers/ optional)
+// create function to select and write questions (randomly from array, and remove from array when answers/ optional)
     function writeQuestion (i) {
         //var questionPrompt = document.createElement("ul");
         questionPrompt.textContent = questions[i].question;
@@ -95,35 +94,15 @@
         }
     };
 
-// write function for timer to be trigger by listener event when begin is pressed
-    function setTime() {
-        var timerInterval = setInterval(function() {
-            secondsLeft --;
-            timerEl.textContent = secondsLeft + " seconds remaining";
-
-            if (secondsLeft === 0) {
-                clearInterval(timerInterval); // not sure if I need this
-                endMessage();
-            }
-        }, 1000);
-    }
-
-    function endMessage() {
-        timerEl.textContent = "Time is up"
-        document.querySelector(".hide").setAttribute("class", "show")
-    };
-
-// in place of eventListeners
+// listen for answers choices clicked and write new questions
     function answerClickedA() {
         if (this.textContent === questions[currentQuestionIndex].correct) {
             alert("Correct"); // may not need this, will just get in the way
             secondsLeft += 10;
-            //questionPrompt.remove(); // remove old question
         }
         else {
             secondsLeft -= 10;
             alert("Wrong");
-            //questionPrompt.remove(); // remove old question
         }
         currentQuestionIndex ++;
         writeQuestion(currentQuestionIndex);
@@ -133,12 +112,10 @@
         if (this.textContent === questions[currentQuestionIndex].correct) {
             alert("Correct"); // may not need this, will just get in the way
             secondsLeft += 10;
-            //questionPrompt.remove(); // remove old question
         }
         else {
             secondsLeft -= 10;
             alert("Wrong");
-            //questionPrompt.remove(); // remove old question
         }
         currentQuestionIndex ++;
         writeQuestion(currentQuestionIndex);
@@ -148,12 +125,10 @@
         if (this.textContent === questions[currentQuestionIndex].correct) {
             alert("Correct"); // may not need this, will just get in the way
             secondsLeft += 10;
-            //questionPrompt.remove(); // remove old question
         }
         else {
             secondsLeft -= 10;
             alert("Wrong");
-            //questionPrompt.remove(); // remove old question
         }
         currentQuestionIndex ++;
         writeQuestion(currentQuestionIndex);
@@ -163,37 +138,56 @@
         if (this.textContent === questions[currentQuestionIndex].correct) {
             alert("Correct"); // may not need this, will just get in the way
             secondsLeft += 10; 
-            //questionPrompt.remove(); // remove old question
         }
         else {
             secondsLeft -= 10;
             alert("Wrong");
-            //questionPrompt.remove(); // remove old question
         }
         currentQuestionIndex ++;
         writeQuestion(currentQuestionIndex);
     };
 
+// write function for timer to be trigger by listener event when begin is pressed
+    function setTime() {
+        var timerInterval = setInterval(function() {
+            secondsLeft --;
+            timerEl.textContent = secondsLeft + " seconds remaining";
 
-    
-// create function to prompt username and store to localStorage
-   if (currentQuestionIndex > 4 || secondsLeft === 0) {
-        questionPrompt.remove();
+            if (secondsLeft === 0 || currentQuestionIndex > 4) {
+                clearInterval(timerInterval);
+                gameOver();
+            }
+        }, 1000);
+    }
 
-        var userForm = document.createElement("form");
-        userForm.textContent = "Enter name";
-        questionEl.append(userForm);
+// ends game, prompts user for name and stores user array to local storage
+function gameOver() {
+    timerEl.textContent = "Time is up"
+    document.querySelector(".hide").setAttribute("class", "show")
 
-        var userName = document.createElement("input");
-        userName.setAttribute("type", "input");
-        userForm.append(userName);
-    } 
+    questionPrompt.remove(); // not working
+
+    var userForm = document.createElement("form");
+    userForm.textContent = "Enter name";
+    questionEl.append(userForm);
+
+    var userName = document.createElement("input");
+    userName.setAttribute("type", "input");
+    userForm.append(userName);
+    var name = userName.value;
+    user.push(name);
+    user.push(secondsLeft);
+
+    console.log(name);
+    console.log(secondsLeft);
+    console.log(user);
+
+    localStorage.setItem("name", user);
+};
 
 // eventListener to setTime and writeQuetion
     begin.addEventListener("click", function() {
         secondsLeft = 60;
         setTime();
         writeQuestion(currentQuestionIndex);
-
-
     });
